@@ -20,3 +20,14 @@ jobs:
 
       - name: run tests
         run: make test
+
+  style-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v3
+
+      - uses: JohnnyMorganz/stylua-action@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          args: --check .
