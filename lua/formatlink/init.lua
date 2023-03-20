@@ -1,9 +1,21 @@
+---@brief [[
+---*formatlink-nvim.txt*	Get the title from URL and format.
+---@brief ]]
+
+---@mod formatlink Formatlink
 local M = {}
+
+---Module setup
+---
+---@usage `require('formatlink').setup()`
+function M.setup()
+  M.create_formatlink_command()
+end
 
 ---@alias values { url: string, title: string }
 ---@alias transformer string|fun(values: values): string
 
----Fetch content by given url
+--- Fetch content by given url
 ---@param url string
 ---@return string
 ---@nodiscard
@@ -14,7 +26,7 @@ end
 ---@type any
 local title_regex = vim.regex([[\m\c<\_s*title\_s*>\_s*\zs.\{-}\ze\_s*<\_s*/title\_s*>]])
 
----Exctract title from given HTML string
+--- Exctract title from given HTML string
 ---@param html string
 ---@return string|nil title Nil if not found title
 ---@nodiscard
@@ -28,7 +40,7 @@ local function extract_title(html)
   return string.sub(html, start_idx + 1, end_idx)
 end
 
----Get title of given url content
+--- Get title of given url content
 ---@param url string
 ---@return string|nil title Nil if not found title
 ---@nodiscard
@@ -40,7 +52,7 @@ function M.get_title(url)
   return title
 end
 
----comment
+--- comment
 ---@param template string
 ---@param values values
 ---@return string
@@ -50,7 +62,7 @@ function M.transform_with_template(template, values)
   return result
 end
 
----comment
+--- comment
 ---@param transformer transformer
 ---@param values values
 ---@return string
@@ -106,10 +118,6 @@ function M.create_formatlink_command()
     register = true,
     desc = "Formatlink",
   })
-end
-
-function M.setup()
-  M.create_formatlink_command()
 end
 
 return M
