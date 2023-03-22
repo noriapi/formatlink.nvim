@@ -1,71 +1,130 @@
-*formatlink-nvim.txt*	Get the title from URL and format.
+*formatlink.txt*           For NVIM v0.8.0          Last change: 2023 March 22
 
 ==============================================================================
-Formatlink                                                          *formatlink*
+Table of Contents                               *formatlink-table-of-contents*
 
-M.setup()                                                     *formatlink.setup*
-    Module setup
+1. formatlink.nvim                                |formatlink-formatlink.nvim|
+  - Usage                                   |formatlink-formatlink.nvim-usage|
+  - Installation                     |formatlink-formatlink.nvim-installation|
+  - Setup                                   |formatlink-formatlink.nvim-setup|
+  - Commands                             |formatlink-formatlink.nvim-commands|
+  - Formatter Template         |formatlink-formatlink.nvim-formatter-template|
+
+==============================================================================
+1. formatlink.nvim                                *formatlink-formatlink.nvim*
+
+Neovim plugin to get title from URL and format.
 
 
-    Usage: ~
->lua
-        require('formatlink').setup()
+USAGE                                       *formatlink-formatlink.nvim-usage*
+
+After copying the URL, run this command and type `p`. A Markdown formatted link
+will be inserted.
+
+>vim
+    :Formatlink [<title>](<url>)
+<
+
+If you want to insert a link in HTML format, do the following.
+
+>vim
+    :Formatlink <a href="<url>"><title></a>
 <
 
 
-values                                                       *formatlink.values*
+INSTALLATION                         *formatlink-formatlink.nvim-installation*
 
-    Type: ~
-        {url:string,title:string}
-
-
-transformer                                             *formatlink.transformer*
-
-    Type: ~
-        string|fun(values:values):string
+Install the plugin with your preferred package manager:
 
 
-M.get_title({url})                                        *formatlink.get_title*
-     Get title of given url content
+PACKER ~
 
-    Parameters: ~
-        {url}  (string)
-
-    Returns: ~
-        (string|nil)  Nil if not found title
-                      @nodiscard
+>lua
+    { "noriapi/formatlink.nvim" }
+<
 
 
-                                            *formatlink.transform_with_template*
-M.transform_with_template({template}, {values})
-     comment
+SETUP                                       *formatlink-formatlink.nvim-setup*
 
-    Parameters: ~
-        {template}  (string)
-        {values}    (values)
+Call the `setup` function, otherwise commands will not be created.
 
-    Returns: ~
-        (string)  @nodiscard
+>lua
+    require("formatlink").setup()
+<
 
 
-M.transform({transformer}, {values})                      *formatlink.transform*
-     comment
+EXAMPLE SETUP WITH LAZY.NVIM ~
 
-    Parameters: ~
-        {transformer}  (transformer)
-        {values}       (values)
+>lua
+    {
+      "noriapi/formatlink.nvim",
+      config = true,
+      cmd = { "Formatlink" },
+      keys = {
+        { "<leader>lm", "<cmd>Formatlink [<title>](<url>)<cr>", desc = "Markdown Link" },
+        { "<leader>lh", '<cmd>Formatlink <a href="<url>"><title></a><cr>', desc = "HTML Link" },
+      },
+    }
+<
 
-    Returns: ~
-        (string)  @nodiscard
+Example of defining a Markdown buffer-specific keymap
+
+>lua
+    {
+      "noriapi/formatlink.nvim",
+      cmd = { "Formatlink" },
+      ft = { "markdown", "md" },
+      config = function(_, opts)
+        require("formatlink").setup()
+    
+        vim.api.nvim_create_autocmd("FileType", {
+          pattern = {
+            "markdown",
+            "md",
+          },
+          callback = function(event)
+            vim.keymap.set(
+              "n",
+              "<localleader>l",
+              "<cmd>Formatlink [<title>](<url>)<cr>",
+              { buffer = event.buf, desc = "Formatlink" }
+            )
+          end,
+        })
+      end,
+    }
+<
 
 
-M.default_register()                               *formatlink.default_register*
+COMMANDS                                 *formatlink-formatlink.nvim-commands*
 
 
-M.formatlink()                                           *formatlink.formatlink*
+                                                    *formatlink-:Formatlink*
 
 
-M.create_formatlink_command()             *formatlink.create_formatlink_command*
+:Formatlink [x] {formatter}            Format a link in [register x] with {formatter}.
+                                       1. Reads URL from [register x] (or the default register if not specified).
+                                       2. Access URL using curl and extract the title.
+                                       3. Format URL and title using {formatter} (string or function).
+                                       4. Writes a formatted string to [register x].
+                                       5. You can paste a formatted link into a buffer using p, P, etc.
 
+
+
+
+FORMATTER TEMPLATE             *formatlink-formatlink.nvim-formatter-template*
+
+If {formatter} is a string, it is considered a template. In this case,
+`<title>` and `<url>` in the string will be replaced with the title and URL,
+respectively.
+
+
+EXAMPLE TEMPLATES ~
+
+
+- Markdown: `[<title>](<url>)`
+- HTML: `<a href="<url>"><title></a>`
+
+Generated by panvimdoc <https://github.com/kdheepak/panvimdoc>
 
 vim:tw=78:ts=8:noet:ft=help:norl:
