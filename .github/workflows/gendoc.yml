@@ -23,6 +23,8 @@ jobs:
         uses: kdheepak/panvimdoc@main
         with:
           vimdoc: "formatlink"
+          description: "Generate arbitrary format link from URL"
+          dedupsubheadings: false
 
       - name: Commit
         uses: stefanzweifel/git-auto-commit-action@v4
