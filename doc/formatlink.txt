@@ -1,14 +1,14 @@
-*formatlink.txt*           For NVIM v0.8.0          Last change: 2023 March 22
+*formatlink.txt*                       Generate arbitrary format link from URL
 
 ==============================================================================
 Table of Contents                               *formatlink-table-of-contents*
 
 1. formatlink.nvim                                |formatlink-formatlink.nvim|
-  - Usage                                   |formatlink-formatlink.nvim-usage|
-  - Installation                     |formatlink-formatlink.nvim-installation|
-  - Setup                                   |formatlink-formatlink.nvim-setup|
-  - Commands                             |formatlink-formatlink.nvim-commands|
-  - Formatter Template         |formatlink-formatlink.nvim-formatter-template|
+  - Usage                                                   |formatlink-usage|
+  - Installation                                     |formatlink-installation|
+  - Setup                                                   |formatlink-setup|
+  - Commands                                             |formatlink-commands|
+  - Formatter Template                         |formatlink-formatter-template|
 
 ==============================================================================
 1. formatlink.nvim                                *formatlink-formatlink.nvim*
@@ -16,7 +16,7 @@ Table of Contents                               *formatlink-table-of-contents*
 Neovim plugin to get title from URL and format.
 
 
-USAGE                                       *formatlink-formatlink.nvim-usage*
+USAGE                                                       *formatlink-usage*
 
 After copying the URL, run this command and type `p`. A Markdown formatted link
 will be inserted.
@@ -32,7 +32,7 @@ If you want to insert a link in HTML format, do the following.
 <
 
 
-INSTALLATION                         *formatlink-formatlink.nvim-installation*
+INSTALLATION                                         *formatlink-installation*
 
 Install the plugin with your preferred package manager:
 
@@ -44,7 +44,7 @@ PACKER ~
 <
 
 
-SETUP                                       *formatlink-formatlink.nvim-setup*
+SETUP                                                       *formatlink-setup*
 
 Call the `setup` function, otherwise commands will not be created.
 
@@ -96,7 +96,7 @@ Example of defining a Markdown buffer-specific keymap
 <
 
 
-COMMANDS                                 *formatlink-formatlink.nvim-commands*
+COMMANDS                                                 *formatlink-commands*
 
 
                                                     *formatlink-:Formatlink*
@@ -112,7 +112,7 @@ COMMANDS                                 *formatlink-formatlink.nvim-commands*
 
 
 
-FORMATTER TEMPLATE             *formatlink-formatlink.nvim-formatter-template*
+FORMATTER TEMPLATE                             *formatlink-formatter-template*
 
 If {formatter} is a string, it is considered a template. In this case,
 `<title>` and `<url>` in the string will be replaced with the title and URL,
