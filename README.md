@@ -15,15 +15,6 @@ If you want to insert a link in HTML format, do the following.
 ```vim
 :Formatlink <a href="<url>"><title></a>
 ```
-
-The details of this command are as follows
-
-1. Reads the URL from the register specified by `"` (or the default register if not specified).
-2. Access the URL using curl and extract the title.
-3. Format the URL and title using the template (string or function) specified in the argument.
-4. Writes a formatted string to the default register.
-5. Use commands such as `p` or `P` to paste the result into a buffer.
-
 ## Installation
 
 Install the plugin with your preferred package manager:
@@ -36,7 +27,7 @@ Install the plugin with your preferred package manager:
 
 ## Setup
 
-Call the `setup` function, otherwise the command will not be created.
+Call the `setup` function, otherwise commands will not be created.
 
 ```lua
 require("formatlink").setup()
@@ -83,3 +74,23 @@ Example of defining a Markdown buffer-specific keymap
   end,
 }
 ```
+
+## Commands
+
+:Formatlink [x] {formatter}
+
+: Format a link in [register x] with {formatter}.
+1. Reads URL from [register x] (or the default register if not specified).
+2. Access URL using curl and extract the title.
+3. Format URL and title using {formatter} (string or function).
+4. Writes a formatted string to [register x].
+5. You can paste a formatted link into a buffer using <kbd>p</kbd>, <kbd>P</kbd>, etc.
+
+## Formatter Template
+
+If {formatter} is a string, it is considered a template. In this case, `<title>` and `<url>` in the string will be replaced with the title and URL, respectively.
+
+### Example Templates
+
+- Markdown: `[<title>](<url>)`
+- HTML: `<a href="<url>"><title></a>`
