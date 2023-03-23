@@ -1,8 +1,3 @@
----@brief [[
----*formatlink-nvim.txt*	Get the title from URL and format.
----@brief ]]
-
----@mod formatlink Formatlink
 local M = {}
 
 ---Module setup
