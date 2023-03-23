@@ -13,7 +13,7 @@ function M.setup()
 end
 
 ---@alias values { url: string, title: string }
----@alias transformer string|fun(values: values): string
+---@alias formatter string|fun(values: values): string
 
 --- Fetch content by given url
 ---@param url string
@@ -57,21 +57,21 @@ end
 ---@param values values
 ---@return string
 ---@nodiscard
-function M.transform_with_template(template, values)
+function M.format_with_template(template, values)
   local result = string.gsub(template, "<(%w+)>", values)
   return result
 end
 
 --- comment
----@param transformer transformer
+---@param formatter formatter
 ---@param values values
 ---@return string
 ---@nodiscard
-function M.transform(transformer, values)
-  if type(transformer) == "string" then
-    return M.transform_with_template(transformer, values)
+function M.format(formatter, values)
+  if type(formatter) == "string" then
+    return M.format_with_template(formatter, values)
   else
-    return transformer(values)
+    return formatter(values)
   end
 end
 
@@ -94,9 +94,9 @@ function M.formatlink(args)
 
   local url = vim.trim(vim.fn.getreg(register))
 
-  local transformer = args.args
-  if transformer == nil or transformer == "" then
-    transformer = "<title>"
+  local formatter = args.args
+  if formatter == nil or formatter == "" then
+    formatter = "<title>"
   end
 
   local title = M.get_title(url)
@@ -104,7 +104,7 @@ function M.formatlink(args)
   if title == nil then
     vim.notify("Can't get title of '" .. url .. "'", vim.log.levels.ERROR)
   else
-    local result = M.transform(transformer, { url = url, title = title })
+    local result = M.format(formatter, { url = url, title = title })
     vim.fn.setreg(register, result)
     vim.notify("Copied(" .. register .. "): " .. result, vim.log.levels.INFO)
   end
