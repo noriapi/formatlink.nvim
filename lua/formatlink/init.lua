@@ -1,6 +1,6 @@
 local M = {}
 
----Module setup
+--- Module setup
 ---
 ---@usage `require('formatlink').setup()`
 function M.setup()
@@ -21,7 +21,7 @@ end
 ---@type any
 local title_regex = vim.regex([[\m\c<\_s*title\_s*>\_s*\zs.\{-}\ze\_s*<\_s*/title\_s*>]])
 
---- Exctract title from given HTML string
+--- Exctract title from `html`
 ---@param html string
 ---@return string|nil title Nil if not found title
 ---@nodiscard
@@ -35,7 +35,7 @@ local function extract_title(html)
   return string.sub(html, start_idx + 1, end_idx)
 end
 
---- Get title of given url content
+--- Get title of `url` content
 ---@param url string
 ---@return string|nil title Nil if not found title
 ---@nodiscard
@@ -47,20 +47,20 @@ function M.get_title(url)
   return title
 end
 
---- comment
----@param values values
----@param template string
----@return string
+--- Format `values` using `template`
+---@param values values Table containing url and title
+---@param template string `<url>` and `<title>` will be replaced
+---@return string formatted_string
 ---@nodiscard
 function M.format_with_template(values, template)
   local result = string.gsub(template, "<(%w+)>", values)
   return result
 end
 
---- comment
----@param values values
----@param formatter formatter
----@return string
+--- Format `values` using `formatter`
+---@param values values Table containing url and title
+---@param formatter formatter Template string or function
+---@return string formatted_string
 ---@nodiscard
 function M.format(values, formatter)
   if type(formatter) == "string" then
@@ -70,6 +70,9 @@ function M.format(values, formatter)
   end
 end
 
+--- Returns default register name respecting 'clipboard' option
+---@return string register_name
+---@nodiscard
 function M.default_register()
   local cb = vim.opt.clipboard:get()
   if vim.tbl_contains(cb, "unnamed") then
@@ -81,6 +84,8 @@ function M.default_register()
   end
 end
 
+--- Format URL in the register into link format using a formatter
+---@param args { reg: string|nil, args: formatter|nil }
 function M.formatlink(args)
   local register = args.reg
   if register == nil or register == "" then
@@ -105,6 +110,7 @@ function M.formatlink(args)
   end
 end
 
+--- Creates |:Formatlink| command
 function M.create_formatlink_command()
   vim.api.nvim_create_user_command("Formatlink", function(args)
     M.formatlink(args)
