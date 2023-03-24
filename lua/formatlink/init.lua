@@ -53,23 +53,23 @@ function M.get_title(url)
 end
 
 --- comment
----@param template string
 ---@param values values
+---@param template string
 ---@return string
 ---@nodiscard
-function M.format_with_template(template, values)
+function M.format_with_template(values, template)
   local result = string.gsub(template, "<(%w+)>", values)
   return result
 end
 
 --- comment
----@param formatter formatter
 ---@param values values
+---@param formatter formatter
 ---@return string
 ---@nodiscard
-function M.format(formatter, values)
+function M.format(values, formatter)
   if type(formatter) == "string" then
-    return M.format_with_template(formatter, values)
+    return M.format_with_template(values, formatter)
   else
     return formatter(values)
   end
@@ -104,7 +104,7 @@ function M.formatlink(args)
   if title == nil then
     vim.notify("Can't get title of '" .. url .. "'", vim.log.levels.ERROR)
   else
-    local result = M.format(formatter, { url = url, title = title })
+    local result = M.format({ url = url, title = title }, formatter)
     vim.fn.setreg(register, result)
     vim.notify("Copied(" .. register .. "): " .. result, vim.log.levels.INFO)
   end
